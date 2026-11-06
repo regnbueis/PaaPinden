@@ -1,0 +1,6 @@
+@PaaPinden.API_HostAddress = http://localhost:5122
+
+GET {{PaaPinden.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
