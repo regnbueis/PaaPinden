@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PaaPinden.API.Contracts;
 using PaaPinden.API.Data;
+using PaaPinden.API.Persistence;
 using Scalar.AspNetCore;
 
 namespace PaaPinden.API
@@ -20,6 +22,8 @@ namespace PaaPinden.API
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<Context>();
 
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            
             builder.Services.AddAuthentication();
             builder.Services.AddAuthorization();
 
