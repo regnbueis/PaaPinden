@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PaaPinden.API.Data;
+using Scalar.AspNetCore;
 
 namespace PaaPinden.API
 {
@@ -34,6 +35,7 @@ namespace PaaPinden.API
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.MapScalarApiReference();
             }
 
             app.UseHttpsRedirection();
