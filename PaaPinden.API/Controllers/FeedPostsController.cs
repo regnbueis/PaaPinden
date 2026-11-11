@@ -118,7 +118,7 @@ namespace PaaPinden.API.Controllers
         }
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("{feedPostId}")]
         public async Task<IActionResult> DeleteAsync(string feedPostId)
         {
             try
