@@ -15,9 +15,10 @@ namespace PaaPinden.API.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserRepository _repository;
         
-        public UsersController(IUserRepository repository)
+        public UsersController(IUserRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
+            _userManager = userManager;
         }
 
         [Authorize(Roles = "Admin")]
