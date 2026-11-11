@@ -28,7 +28,9 @@ namespace PaaPinden.API.Controllers
             try
             {
                 List<FeedPost> feedPosts = await _repository.GetAllAsync();
-                List<FeedPostDTO> feedPostDTOs = feedPosts.Select(x => x.ToDTO()).ToList();
+                List<FeedPostDTO> feedPostDTOs = feedPosts
+                    .Select(x => x.ToDTO())
+                    .ToList();
 
                 return Ok(feedPostDTOs);
             }
@@ -44,7 +46,9 @@ namespace PaaPinden.API.Controllers
             try
             {
                 List<FeedPost> feedPosts = await _repository.GetAllByUserIdAsync(userId);
-                List<FeedPostDTO> feedPostDTOs = feedPosts.Select(x => x.ToDTO()).ToList();
+                List<FeedPostDTO> feedPostDTOs = feedPosts
+                    .Select(x => x.ToDTO())
+                    .ToList();
 
                 return Ok(feedPostDTOs);
             }

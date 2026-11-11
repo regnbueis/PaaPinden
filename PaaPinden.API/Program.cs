@@ -23,7 +23,8 @@ namespace PaaPinden.API
                 .AddEntityFrameworkStores<Context>();
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            
+            builder.Services.AddScoped<IFeedPostRepository, FeedPostRepository>();
+
             builder.Services.AddAuthentication();
             builder.Services.AddAuthorization();
 
@@ -33,7 +34,6 @@ namespace PaaPinden.API
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
-            builder.Services.AddScoped<IFeedPostRepository, FeedPostRepository>();
 
             var app = builder.Build();
 
