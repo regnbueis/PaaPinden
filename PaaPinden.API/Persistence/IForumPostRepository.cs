@@ -1,5 +1,6 @@
 ﻿using PaaPinden.API.Models;
 
+
 namespace PaaPinden.API.Persistence
 {
     public interface IForumPostRepository
@@ -10,5 +11,7 @@ namespace PaaPinden.API.Persistence
         Task<List<ForumPost>> GetAllAsync();
         Task<ForumPost> GetByIdAsync(string forumPostId);
         Task<List<ForumPost>> GetAllByUserIdAsync(string userId);
+        Task<List<ForumPost>> GetAllByTopicAsync(ForumPostTopic forumPostTopic);
     }
+    
 }

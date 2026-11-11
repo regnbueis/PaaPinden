@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PaaPinden.API.Data;
+using PaaPinden.API.Persistence;
 using Scalar.AspNetCore;
 
 namespace PaaPinden.API
@@ -28,6 +29,8 @@ namespace PaaPinden.API
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddScoped<IForumPostRepository, ForumPostRepository>();
 
             var app = builder.Build();
 

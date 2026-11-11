@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PaaPinden.API.Data;
@@ -7,8 +8,11 @@ using PaaPinden.API.Persistence;
 using System.Linq.Expressions;
 
 
+
 namespace PaaPinden.API.Controllers
 {
+    
+
     [ApiController]
     [Route("api/[controller]")]
     public class ForumPostsController : ControllerBase
@@ -32,6 +36,7 @@ namespace PaaPinden.API.Controllers
 
             var posts = await forumPostRepository.GetAllAsync();
             return Ok(posts);
+            
             /*try
             {
                 string? userId = userManager.GetUserId(User);
@@ -45,12 +50,12 @@ namespace PaaPinden.API.Controllers
 
         }
         [HttpGet("{forumPostId}")]
-        public async Task<IActionResult> GetByIdAsync(int forumPostId)
+        public async Task<IActionResult> GetByIdAsync(string forumPostId)
         {
             try
             {
                 string? userId = userManager.GetUserId(User);
-                if (userId == null) return BadRequest();
+                if (userId == null) return NotFound();
 
                 ForumPost? forumPost = await forumPostRepository.GetByIdAsync(userId);
                 if (forumPost == null) return NotFound();
@@ -77,9 +82,6 @@ namespace PaaPinden.API.Controllers
         {
             try
             {
-                string? userId = userManager.GetUserId(User);
-                if (userId == null) return BadRequest();
-
                 List<ForumPost> forumPosts = await forumPostRepository.GetAllByUserIdAsync(userId);
                 return Ok(forumPosts);
             }
@@ -88,12 +90,10 @@ namespace PaaPinden.API.Controllers
                 return BadRequest(); 
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> CreateAsync([FromBody] ForumPost forumPost)
         {
-            string? userId = userManager.GetUserId(User);
-            if (userId == null) return Unauthorized();
-
             forumPost.Id = Guid.NewGuid().ToString();
             forumPost.UserId = userId;
 
@@ -145,6 +145,7 @@ namespace PaaPinden.API.Controllers
                 return BadRequest();
             }*/
         }
+
         [HttpDelete("{forumPostId}")]
         public async Task<IActionResult> DeleteAsync(string forumPostId)
         {
@@ -174,6 +175,20 @@ namespace PaaPinden.API.Controllers
             { 
                 return BadRequest(); 
             }*/
+        }
+
+        [HttpGet("topics/{topic}")]
+        public async Task<IActionResult> GetAllByTopicAsync(ForumPostTopic topic)
+        {
+            try
+            {
+                List<ForumPost> forumPosts = await forumPostRepository.GetAllByTopicAsync(topic);
+                return Ok(forumPosts);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

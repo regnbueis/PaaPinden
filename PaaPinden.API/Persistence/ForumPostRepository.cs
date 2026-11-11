@@ -2,6 +2,7 @@
 using PaaPinden.API.Data;
 using PaaPinden.API.Models;
 
+
 namespace PaaPinden.API.Persistence
 {
     public class ForumPostRepository : IForumPostRepository
@@ -60,7 +61,13 @@ namespace PaaPinden.API.Persistence
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
         }
+        public async Task<List<ForumPost>> GetAllByTopicAsync(ForumPostTopic forumPostTopic)
+        {
+            return await _context.ForumPosts
+                .Where(x => x.Topic == forumPostTopic)
+                .ToListAsync();
+        }
 
-        
+
     }
 }
