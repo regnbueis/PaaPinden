@@ -1,0 +1,26 @@
+.topbar {
+    background-color: #faf7ef;
+    width: 100%;
+}
+
+.brand-text {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #592b40;
+}
+
+.search-form { 
+    max-width: 450px; 
+}
+
+.search-group {
+    background-color: #fbf7ec;
+    border: 1px solid #ddd5bd;
+    padding: .1rem .5rem;
+}
+
+.icon-link { color: #6b2a45; }
+.icon-link:hover { color: #8a3a5c; }
+
+.dropdown-toggle::after { font-size: .7rem; color: #6b2a45; }
