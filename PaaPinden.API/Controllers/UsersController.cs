@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PaaPinden.API.Contracts;
 using PaaPinden.API.Data;
@@ -11,6 +12,7 @@ namespace PaaPinden.API.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserRepository _repository;
         
         public UsersController(IUserRepository repository)
@@ -55,11 +57,14 @@ namespace PaaPinden.API.Controllers
         }
         
         [Authorize]
-        [HttpPut("{userId}")]
+        [HttpPatch("{userId}")]
         public async Task<IActionResult> UpdateAsync(string userId, [FromBody] UserUpdateDTO userUpdateDto)
         {
             try
             {
+                string? authorizedUserId = _userManager.GetUserId(User);
+                if (authorizedUserId != userId) return Forbid();
+                
                 UserDTO userDTO = new UserDTO()
                 {
                     Id = userId,
@@ -83,6 +88,9 @@ namespace PaaPinden.API.Controllers
         {
             try
             {
+                string? authorizedUserId = _userManager.GetUserId(User);
+                if (authorizedUserId != userId) return Forbid();
+                
                 await _repository.DeleteAsync(userId);
                 return Ok();
             }
@@ -98,6 +106,9 @@ namespace PaaPinden.API.Controllers
         {
             try
             {
+                string? authorizedUserId = _userManager.GetUserId(User);
+                if (authorizedUserId != userId) return Forbid();
+                
                 await _repository.FollowAsync(userId, followDto.FollowedUserId);
                 return Ok();
             }
@@ -113,6 +124,9 @@ namespace PaaPinden.API.Controllers
         {
             try
             {
+                string? authorizedUserId = _userManager.GetUserId(User);
+                if (authorizedUserId != userId) return Forbid();
+                
                 await _repository.UnfollowAsync(userId, followedUserId);
                 return Ok();
             }
