@@ -72,14 +72,14 @@ namespace PaaPinden.API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] FeedPostDTO feedPostDTO)
         {
             try
             {
-                //string? userId = _userManager.GetUserId(User);
-                //if (userId == null) return BadRequest();
+                string? userId = _userManager.GetUserId(User);
+                if (userId == null) return BadRequest();
 
                 FeedPost feedPost = feedPostDTO.ToModel();
                 await _repository.CreateAsync(feedPost);
@@ -91,22 +91,22 @@ namespace PaaPinden.API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPatch("{feedPostId}")]
         public async Task<IActionResult> UpdateAsync(string feedPostId, [FromBody] FeedPostDTO feedPostDTO)
         {
             try
             {
-                //string? userId = _userManager.GetUserId(User);
-                //if (userId == null) return BadRequest();
+                string? userId = _userManager.GetUserId(User);
+                if (userId == null) return BadRequest();
 
                 FeedPost? feedPost = await _repository.GetByIdAsync(feedPostId);
                 if (feedPost == null) return NotFound();
 
-                //if (_userManager.GetUserId(User) != feedPost.UserId)
-                //{
-                //        return Forbid();
-                //}
+                if (_userManager.GetUserId(User) != feedPost.UserId)
+                {
+                    return Forbid();
+                }
 
                 await _repository.UpdateAsync(feedPostDTO.ToModel());
                 return Ok();
@@ -117,22 +117,25 @@ namespace PaaPinden.API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteAsync(string feedPostId)
         {
             try
             {
+                string? userId = _userManager.GetUserId(User);
+                if (userId == null) return BadRequest();
+
                 FeedPost feedPost = await _repository.GetByIdAsync(feedPostId);
                 if (feedPost == null) return BadRequest();
 
-                //if (_userManager.GetUserId(User) != feedPost.UserId)
-                //{
-                //    if (!User.IsInRole("Admin"))
-                //    {
-                //        return Forbid();
-                //    }
-                //}
+                if (userId != feedPost.UserId)
+                {
+                    if (!User.IsInRole("Admin"))
+                    {
+                        return Forbid();
+                    }
+                }
 
                 await _repository.DeleteAsync(feedPostId);
                 return Ok();
