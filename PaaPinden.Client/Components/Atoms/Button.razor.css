@@ -1,0 +1,128 @@
+.pp-button {
+    --pp-plum: #592b40;
+    --pp-rose: #a75f77;
+    --pp-sage: #7d8968;
+    --pp-cream: #faf7ef;
+    --pp-active: #e5e5d5;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    min-height: 2.5rem;
+    padding: .5rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--pp-plum);
+    font: inherit;
+    font-weight: 500;
+    line-height: 1.25;
+    text-decoration: none;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: background-color .15s, border-color .15s, color .15s;
+}
+
+.pp-button:hover {
+    color: var(--pp-plum);
+    text-decoration: none;
+}
+
+.pp-button:focus-visible {
+    outline: 3px solid var(--pp-plum);
+    outline-offset: 3px;
+}
+
+.pp-button--pink {
+    background: var(--pp-rose);
+    color: #fff;
+    border-radius: .65rem;
+}
+
+.pp-button--pink:hover {
+    background: #8f4c63;
+    color: #fff;
+}
+
+.pp-button--green-current {
+    background: var(--pp-sage);
+    color: #fff;
+}
+
+.pp-button--green-current:hover {
+    background: #697555;
+    color: #fff;
+}
+
+.pp-button--green-link {
+    border-color: var(--pp-sage);
+    color: var(--pp-plum);
+    background: var(--pp-cream);
+}
+
+.pp-button--green-link:hover {
+    background: var(--pp-active);
+}
+
+.pp-button--like,
+.pp-button--save,
+.pp-button--notification,
+.pp-button--message {
+    gap: .3rem;
+    padding: .35rem;
+    border-radius: .5rem;
+}
+
+.pp-button--like {
+    color: var(--pp-rose);
+}
+
+.pp-button--like:hover,
+.pp-button--save:hover {
+    background: #eee5e6;
+}
+
+.pp-button--like:hover {
+    color: var(--pp-rose);
+}
+
+.pp-button--like.is-active {
+    background: #f0e0e5;
+}
+
+.pp-button--icon-only {
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+.pp-button__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 1.65rem;
+    height: 1.65rem;
+}
+
+.pp-button__icon ::deep svg {
+    width: 100%;
+    height: 100%;
+}
+
+.pp-button--display-only {
+    cursor: default;
+}
+
+.pp-button:disabled,
+.pp-button.is-disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pp-button {
+        transition: none;
+    }
+}

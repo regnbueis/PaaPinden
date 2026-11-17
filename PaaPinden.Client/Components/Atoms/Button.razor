@@ -1,5 +1,283 @@
-﻿<h3>Button</h3>
+@using Microsoft.AspNetCore.Components.Web
+
+else if (Href is not null)
+{
+    <a @attributes="AdditionalAttributes"
+       class="@CssClass"
+       href="@(Disabled ? null : Href)"
+       aria-label="@AccessibleLabel"
+       aria-current="@CurrentPage"
+       aria-disabled="@(Disabled ? "true" : null)"
+       tabindex="@(Disabled ? "-1" : null)"
+       @onclick="HandleClickAsync">
+        @Content
+    </a>
+}
+else
+{
+    <button @attributes="AdditionalAttributes"
+            class="@CssClass"
+            type="@Type"
+            disabled="@Disabled"
+            aria-label="@AccessibleLabel"
+            aria-pressed="@Pressed"
+            aria-current="@CurrentPage"
+            @onclick="HandleClickAsync">
+        @Content
+    </button>
+}
 
 @code {
+    public enum ButtonDesign
+    {
+        Like,
+        Save,
+        GreenCurrent,
+        GreenLink,
+        Pink,
+        Notification,
+        Message
+    }
 
+    [Parameter]
+    public ButtonDesign Design { get; set; } = ButtonDesign.Pink;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? Icon { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    [Parameter]
+    public string? Href { get; set; }
+
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string Type { get; set; } = "button";
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public bool IsActive { get; set; }
+
+    [Parameter]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool IsIconDesign
+    {
+        get
+        {
+            return Design == ButtonDesign.Like
+                || Design == ButtonDesign.Save
+                || Design == ButtonDesign.Notification
+                || Design == ButtonDesign.Message;
+        }
+    }
+
+    private PaaPinden.Components.Atoms.Icon.IconDesign DefaultIcon
+    {
+        get
+        {
+            switch (Design)
+            {
+                case ButtonDesign.Like:
+                    return PaaPinden.Components.Atoms.Icon.IconDesign.Like;
+                case ButtonDesign.Save:
+                    return PaaPinden.Components.Atoms.Icon.IconDesign.Save;
+                case ButtonDesign.Notification:
+                    return PaaPinden.Components.Atoms.Icon.IconDesign.Notification;
+                case ButtonDesign.Message:
+                    return PaaPinden.Components.Atoms.Icon.IconDesign.Message;
+                default:
+                    throw new InvalidOperationException("Dette knapdesign har ikke et standardikon.");
+            }
+        }
+    }
+
+    private bool IsIconOnly
+    {
+        get
+        {
+            return IsDisplayOnly || (IsIconDesign && ChildContent is null);
+        }
+    }
+
+    private bool IsToggle
+    {
+        get
+        {
+            return Design == ButtonDesign.Like || Design == ButtonDesign.Save;
+        }
+    }
+
+    private bool IsDisplayOnly
+    {
+        get
+        {
+            return Design == ButtonDesign.Notification || Design == ButtonDesign.Message;
+        }
+    }
+
+    private string VariantClass
+    {
+        get
+        {
+            switch (Design)
+            {
+                case ButtonDesign.Like:
+                    return "like";
+                case ButtonDesign.Save:
+                    return "save";
+                case ButtonDesign.GreenCurrent:
+                    return "green-current";
+                case ButtonDesign.GreenLink:
+                    return "green-link";
+                case ButtonDesign.Pink:
+                    return "pink";
+                case ButtonDesign.Notification:
+                    return "notification";
+                case ButtonDesign.Message:
+                    return "message";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(Design), Design, "Ukendt knapdesign.");
+            }
+        }
+    }
+
+    private string CssClass
+    {
+        get
+        {
+            var classes = new List<string> { "pp-button", $"pp-button--{VariantClass}" };
+
+            if (IsActive && !IsDisplayOnly)
+                classes.Add("is-active");
+
+            if (IsIconOnly)
+                classes.Add("pp-button--icon-only");
+
+            if (Disabled && !IsDisplayOnly)
+                classes.Add("is-disabled");
+
+            if (IsDisplayOnly)
+                classes.Add("pp-button--display-only");
+
+            if (!string.IsNullOrWhiteSpace(Class))
+                classes.Add(Class);
+
+            return string.Join(" ", classes);
+        }
+    }
+
+    private string DefaultLabel
+    {
+        get
+        {
+            switch (Design)
+            {
+                case ButtonDesign.Like:
+                    return IsActive ? "Fjern synes godt om" : "Synes godt om";
+                case ButtonDesign.Save:
+                    return IsActive ? "Fjern fra gemte opslag" : "Gem opslag";
+                case ButtonDesign.GreenCurrent:
+                    return "Her er du";
+                case ButtonDesign.GreenLink:
+                    return "Se mere";
+                case ButtonDesign.Notification:
+                    return "Notifikationer";
+                case ButtonDesign.Message:
+                    return "Beskeder";
+                default:
+                    return "Fortsæt";
+            }
+        }
+    }
+
+    private string? AccessibleLabel
+    {
+        get
+        {
+            if (Label is not null)
+                return Label;
+
+            if (ChildContent is not null)
+                return null;
+
+            return DefaultLabel;
+        }
+    }
+
+    private string? CurrentPage
+    {
+        get
+        {
+            if (Design == ButtonDesign.GreenCurrent)
+                return "page";
+
+            return null;
+        }
+    }
+
+    private string? Pressed
+    {
+        get
+        {
+            if (IsToggle)
+            {
+                if (IsActive)
+                    return "true";
+                else
+                return "false";
+            }
+            return null;
+        }
+    }  
+
+    private Task HandleClickAsync(MouseEventArgs args)
+    {
+        if (Disabled)
+            return Task.CompletedTask;
+
+        return OnClick.InvokeAsync(args);
+    }
+
+    private RenderFragment Content
+    {
+        get
+        {
+            return @<text>
+                @if (Icon is not null)
+                {
+                    <span class="pp-button__icon" aria-hidden="true">
+                        @Icon
+                    </span>
+                }
+                else if (IsIconDesign)
+                {
+                    <span class="pp-button__icon" aria-hidden="true">
+                        <PaaPinden.Components.Atoms.Icon Design="@DefaultIcon" IsActive="@IsActive" />
+                    </span>
+                }
+
+                @if (ChildContent is not null)
+                {
+                    <span class="pp-button__text">@ChildContent</span>
+                }
+                else if (!IsIconDesign)
+                {
+                    <span class="pp-button__text">@(Label ?? DefaultLabel)</span>
+                }
+
+            </text>;
+        }
+    }
 }
