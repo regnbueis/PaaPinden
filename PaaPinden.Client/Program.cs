@@ -1,6 +1,6 @@
-using PaaPinden.Client.Components;
+using PaaPinden.Components;
 
-namespace PaaPinden.Client
+namespace PaaPinden
 {
     public class Program
     {
