@@ -15,8 +15,8 @@
             <Button Design="Button.ButtonDesign.Notification" />
             <Button Design="Button.ButtonDesign.Message" />
 
-            <NavLink href="profile" class="navbar-brand d-flex align-items-center gap-4">
-                @if (user.Image.Length > 0)
+            <NavLink href=@($"profile/{user.Id}") class= "navbar-brand d-flex align-items-center gap-4" >
+                @if (user.Image != null && user.Image.Length > 0)
                 {
                     <img src="@($"data:{user.ImageFormat};base64,{Convert.ToBase64String(user.Image)}")" alt="" width="40" height="40" class="object-fit-cover rounded-circle" />
                 }
@@ -33,7 +33,7 @@
 
 @code {
     private ApplicationUser? user;
-    private string username => user?.UserName?.Split("@")[0] ?? string.Empty;
+    private string username => user?.Name ?? string.Empty;
     private string initials => string.Join("", username.Split(' ').Select(x => x[0])).ToUpper();
 
     protected override async Task OnInitializedAsync()

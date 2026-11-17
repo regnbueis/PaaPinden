@@ -1,0 +1,25 @@
+﻿@inject IUserRepository userRepository
+@page "/profile/{UserId}"
+
+
+@if (User != null)
+{
+    <PageTitle>Profil: @User.Name</PageTitle>
+    <p>Profil: @User.Name</p>
+}
+else
+{
+    <PageTitle>Profile</PageTitle>
+    <p>User not found</p>
+}
+
+@code {
+    [Parameter]
+    public string UserId { get; set; }
+    public ApplicationUser? User { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        User = await userRepository.GetByIdAsync(UserId);
+    }
+}

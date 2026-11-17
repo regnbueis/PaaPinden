@@ -1,10 +1,24 @@
 using Microsoft.AspNetCore.Identity;
 using PaaPinden.Models;
 namespace PaaPinden.Data;
-// Add profile data for application users by adding properties to the ApplicationUser class
+
 public class ApplicationUser : IdentityUser
 {
     public string Name { get; set; } = string.Empty;
+    public override string? UserName
+    {
+        get => base.UserName;
+        set
+        {
+            base.UserName = value;
+
+            if (string.IsNullOrEmpty(Name))
+            {
+                Name = value?.Split("@")?[0] ?? string.Empty;
+            }
+        }
+    }
+
     public byte[]? Image { get; set; }
     public string? ImageFormat { get; set; }
     public List<FeedPost> FeedPosts { get; set; }
