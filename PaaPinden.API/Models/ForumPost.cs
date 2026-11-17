@@ -14,5 +14,17 @@ namespace PaaPinden.API.Models
         public string Link { get; set; }
         public string UserId { get; set; }
         public ApplicationUser? User { get; set; }
+        public ForumPostTopic Topic { get; set; }
+    }
+
+    public enum ForumPostTopic
+    {
+        Techniques,
+        Yarn,
+        Needles,
+        Help,
+        FullPatern,
+        Tips,
+        ChartPattern
     }
 }
