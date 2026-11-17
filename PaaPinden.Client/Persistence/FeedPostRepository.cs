@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using PaaPinden.Contracts;
 using PaaPinden.Data;
 using PaaPinden.Models;
@@ -7,15 +8,17 @@ namespace PaaPinden.Persistence
 {
     public class FeedPostRepository : IFeedPostRepository
     {
-        private readonly PaaPindenContext _context;
+        private readonly IDbContextFactory<PaaPindenContext> _factory;
 
-        public FeedPostRepository(PaaPindenContext context)
+        public FeedPostRepository(IDbContextFactory<PaaPindenContext> factory)
         {
-            _context = context;
+            _factory = factory;
         }
 
         public async Task CreateAsync(FeedPost feedPost)
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             feedPost.Id = Guid.NewGuid().ToString();
             _context.FeedPosts.Add(feedPost);
             await _context.SaveChangesAsync();
@@ -23,6 +26,8 @@ namespace PaaPinden.Persistence
 
         public async Task DeleteAsync(string feedPostId)
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             FeedPost? feedPostToDelete = await _context.FeedPosts.FindAsync(feedPostId);
             if (feedPostToDelete == null) return;
 
@@ -32,6 +37,8 @@ namespace PaaPinden.Persistence
 
         public async Task<List<FeedPost>> GetAllAsync()
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             return await _context.FeedPosts
                 .AsNoTracking()
                 .Include(x => x.User)
@@ -40,6 +47,8 @@ namespace PaaPinden.Persistence
 
         public async Task<List<FeedPost>> GetAllByUserIdAsync(string userId)
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             return await _context.FeedPosts
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
@@ -47,6 +56,8 @@ namespace PaaPinden.Persistence
 
         public async Task<FeedPost?> GetByIdAsync(string feedPostId)
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             return await _context.FeedPosts
                 .Where(x => x.Id == feedPostId)
                 .Include(x => x.User)
@@ -55,6 +66,8 @@ namespace PaaPinden.Persistence
 
         public async Task UpdateAsync(FeedPost feedPost)
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             FeedPost? feedPostToUpdate = await _context.FeedPosts.FindAsync(feedPost.Id);
             if (feedPostToUpdate == null) return;
 

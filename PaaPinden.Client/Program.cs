@@ -15,12 +15,13 @@ namespace PaaPinden
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<PaaPindenContext>(options =>
+            builder.Services.AddDbContextFactory<PaaPindenContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });
 
             // Add services to the container.
+
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IFeedPostRepository, FeedPostRepository>();
             builder.Services.AddScoped<IForumPostRepository, ForumPostRepository>();

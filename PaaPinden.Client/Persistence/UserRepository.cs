@@ -7,21 +7,25 @@ namespace PaaPinden.Persistence
 {
     public class UserRepository : IUserRepository
     {
-        private readonly PaaPindenContext _context;
+        private readonly IDbContextFactory<PaaPindenContext> _factory;
 
-        public UserRepository(PaaPindenContext context)
+        public UserRepository(IDbContextFactory<PaaPindenContext> factory)
         {
-            _context = context;
+            _factory = factory;
         }
 
         public async Task<List<ApplicationUser>> GetAllAsync()
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             return await _context.Users
                 .ToListAsync();
         }
 
         public async Task<ApplicationUser?> GetByIdAsync(string userId)
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             return await _context.Users
                 .Where(x => x.Id == userId)
                 .Include(x => x.FeedPosts)
@@ -35,6 +39,8 @@ namespace PaaPinden.Persistence
 
         public async Task UpdateAsync(ApplicationUser user)
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             ApplicationUser? userToUpdate = await _context.Users.FindAsync(user.Id);
             if (userToUpdate == null) return;
 
@@ -44,6 +50,8 @@ namespace PaaPinden.Persistence
 
         public async Task DeleteAsync(string userId)
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             ApplicationUser? user = await _context.Users.FindAsync(userId);
             if (user == null) return;
 
@@ -59,6 +67,8 @@ namespace PaaPinden.Persistence
 
         public async Task FollowAsync(string userId, string followedUserId)
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             Follow? existingFollow = await _context.Follows
                 .Where(x => x.UserId == userId && x.FollowedUserId == followedUserId)
                 .FirstOrDefaultAsync();
@@ -77,6 +87,8 @@ namespace PaaPinden.Persistence
 
         public async Task UnfollowAsync(string userId, string followedUserId)
         {
+            using PaaPindenContext _context = _factory.CreateDbContext();
+
             Follow? follow = await _context.Follows
                 .Where(x => x.UserId == userId && x.FollowedUserId == followedUserId)
                 .FirstOrDefaultAsync();
