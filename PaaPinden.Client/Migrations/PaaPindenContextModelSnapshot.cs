@@ -195,6 +195,10 @@ namespace PaaPinden.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 

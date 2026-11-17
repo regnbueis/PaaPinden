@@ -1,0 +1,36 @@
+﻿
+<div class="container gap-3">
+    <div>
+        @if(User.Image.Length > 0)
+        {
+            <img src="data:image/@User.ImageFormat;base64,@Convert.ToBase64String(@User.Image)" class="rounded-circle" />
+        }
+        else
+        {
+            @{
+                string[] initialsArray = User.Name.Split(" ");
+                string initials = initialsArray.ToString();
+            }
+            <p></p>
+        }
+
+    </div>
+    <div>
+        <p>@User.Name</p>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public ApplicationUser? User { get; set; }
+
+
+    protected override void OnParametersSet()
+    {
+        
+
+        base.OnParametersSet();
+    }
+}
