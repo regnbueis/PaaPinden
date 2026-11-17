@@ -7,11 +7,10 @@
         }
         else
         {
-            @{
-                string[] initialsArray = User.Name.Split(" ");
-                string initials = initialsArray.ToString();
-            }
-            <p></p>
+            string[] initialsArray = User.Name.Split(" ");
+            string initials = initialsArray.ToString();
+            
+            <p class="rounded-circle">@initials</p>
         }
 
     </div>
