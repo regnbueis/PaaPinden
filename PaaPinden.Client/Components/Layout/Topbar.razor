@@ -1,8 +1,28 @@
-<div class="navbar topbar px-3 py-2">
-    <div class="container-fluid gap-3">
-        <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="/">
-            <img src="/logo.png" alt="På pinden" width="40" height="40" />
-            <span class="brand-text">På pinden</span>
-        </a>
+<div class="navbar topbar d-flex justify-content-between align-items-center gap-4 px-3 border-bottom flex-nowrap">
+    <NavLink href="" class="navbar-brand d-flex align-items-center gap-2">
+        <img src="/logo.png" alt="På pinden" width="65" height="65" class="rounded-circle" />
+        <span>På pinden</span>
+    </NavLink>
+
+    <div class="d-flex align-items-center gap-2">
+        <NavLink href="profile" class="navbar-brand d-flex align-items-center gap-4">
+            @if (ProfilePicture.Length > 0)
+            {
+                <img src="@($"data:image/png;base64,{Convert.ToBase64String(ProfilePicture)}")" alt="" width="40" height="40" class="rounded-circle" />
+            }
+            else
+            {
+                <div class="profile-initials rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                    <span class="text-white">@initials</span>
+                </div>
+            }
+        </NavLink>
     </div>
 </div>
+
+@code {
+    public byte[] ProfilePicture { get; set; } = new byte[] { };
+
+    public string Username { get; set; } = "Test username";
+    private string initials => string.Join("", Username.Split(' ').Select(x => x[0])).ToUpper();
+}
