@@ -1,0 +1,45 @@
+﻿nav ::deep .nav-link.ColorForSideBarText {
+    color: #592B40;
+}
+
+    nav ::deep .nav-link.ColorForSideBarText.active {
+        background-color: #fce4ec;
+    }
+
+.ColorBottonForSideBar {
+    background-color: #A75F77;
+    border-color: #A75F77;
+    color: white;
+}
+
+    .ColorBottonForSideBar:hover {
+        background-color: #A75F77;
+        border-color: #A75F77;
+        color: white;
+    }
+.app-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.layout-content {
+    display: flex;
+    flex: 1;
+    align-items: stretch;
+}
+
+.sidebar-container {
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 24px;
+}
+aside {
+    width: 200px;
+    min-height: calc(100vh - 70px);
+}
