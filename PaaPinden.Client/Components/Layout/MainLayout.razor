@@ -1,9 +1,24 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager navigationManager
 
-<div class="d-flex flex-column">
-    <div class="d-flex flex-row">
-        <main>
-            @Body
-        </main>
+@if (IsAccountPage)
+{
+    <main>
+        @Body
+    </main>    
+}
+else
+{
+    <div class="d-flex flex-column">
+        <Topbar />
+        <div class="d-flex flex-row">
+            <main>
+                @Body
+            </main>
+        </div>
     </div>
-</div>
+}
+
+@code {
+    private bool IsAccountPage => new Uri(navigationManager.Uri).AbsolutePath.StartsWith("/Account", StringComparison.OrdinalIgnoreCase);
+}
