@@ -8,16 +8,35 @@
 }
 
 .app-layout__header {
-    position: flex;
+    position: sticky;
     top: 0;
     z-index: 100;
     flex-shrink: 0;
     background: #faf7ef;
 }
 
+.app-layout__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    align-items: start;
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+}
+
+.app-layout__body--sidebar {
+    grid-template-columns: 16rem minmax(0, 1fr);
+}
+
+.app-layout__sidebar {
+    align-self: stretch;
+    min-width: 0;
+    border-right: 1px solid #decfc3;
+}
+
 .app-layout__content {
     box-sizing: border-box;
-    flex: 1;
     width: 100%;
     max-width: 90rem;
     min-width: 0;
@@ -29,7 +48,18 @@
 
 .app-layout__content--account {
     max-width: 72rem;
-    padding-block: clamp(1.5rem, 5vw, 4rem);
+    padding-block: 1.5rem;
+}
+
+@media (max-width: 800px) {
+    .app-layout__body--sidebar {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .app-layout__sidebar {
+        border-right: 0;
+        border-bottom: 1px solid #decfc3;
+    }
 }
 
 .skip-link {

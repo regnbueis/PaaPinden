@@ -10,12 +10,18 @@
     <header class="app-layout__header">
         <Topbar User="@user" />
     </header>
-    <div class="app-layout__sidebar">
-        <Sidebar User="@user" />
+    <div class="@BodyClass">
+        @if (ShowSidebar)
+        {
+            <div class="app-layout__sidebar">
+                <Sidebar User="@user" />
+            </div>
+        }
+
+        <main id="main-content" class="@ContentClass" tabindex="-1">
+            @Body
+        </main>
     </div>
-    <main id="main-content" class="@ContentClass" tabindex="-1">
-        @Body
-    </main>
 </div>      
 
 <div id="blazor-error-ui" role="alert">
@@ -48,6 +54,25 @@
 
             return pagePath.Equals("Account", StringComparison.OrdinalIgnoreCase)
                 || pagePath.StartsWith("Account/", StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    private bool ShowSidebar
+    {
+        get
+        {
+            return user is not null && !IsAccountPage;
+        }
+    }
+
+    private string BodyClass
+    {
+        get
+        {
+            if (ShowSidebar)
+                return "app-layout__body app-layout__body--sidebar";
+
+            return "app-layout__body";
         }
     }
 
