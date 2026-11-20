@@ -1,24 +1,90 @@
-﻿@inherits LayoutComponentBase
-@inject NavigationManager navigationManager
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthProvider
+@inject IUserRepository UserRepository
+@using System.Security.Claims
 
-@if (IsAccountPage)
-{
-    <main>
-        @Body
-    </main>    
-}
-else
-{
-    <div class="d-flex flex-column">
-        <Topbar />
-        <div class="d-flex flex-row">
-            <main>
+<div class="app-layout">
+    @* cspell:ignore indhold *@
+    <a class="skip-link" href="#main-content">Gå til indhold</a>
+    <header class="app-layout__header">
+        <Topbar User="@AuthenticatedUser" />
+    </header>
+    <div class="@BodyClass">
+        @if (ShowSidebar)
+        {
+            <div class="app-layout__sidebar">
+                <Sidebar User="@AuthenticatedUser" />
+            </div>
+        }
+
+        <main id="main-content" class="@ContentClass" tabindex="-1">
+            <CascadingValue Value="@AuthenticatedUser">
                 @Body
-            </main>
-        </div>
+            </CascadingValue>
+        </main>
     </div>
-}
+</div>      
+
+<div id="blazor-error-ui" role="alert">
+    <span>Der opstod en fejl. Genindlæs siden for at fortsætte.</span>
+    <a href="" class="reload">Genindlæs</a>
+    <button type="button" class="dismiss" aria-label="Luk fejlmeddelelsen">×</button>
+</div>
 
 @code {
-    private bool IsAccountPage => new Uri(navigationManager.Uri).AbsolutePath.StartsWith("/Account", StringComparison.OrdinalIgnoreCase);
+    public ApplicationUser? AuthenticatedUser { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState state = await AuthProvider.GetAuthenticationStateAsync();
+        string? userId = state.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (state.User.Identity?.IsAuthenticated == true && !string.IsNullOrWhiteSpace(userId))
+        {
+            AuthenticatedUser = await UserRepository.GetByIdAsync(userId);
+        }
+    }
+
+    private bool IsAccountPage
+    {
+        get
+        {
+            string relativePath = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+            string pagePath = relativePath.Split('?', '#')[0].TrimEnd('/');
+
+            return pagePath.Equals("Account", StringComparison.OrdinalIgnoreCase)
+                || pagePath.StartsWith("Account/", StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    private bool ShowSidebar
+    {
+        get
+        {
+            return AuthenticatedUser is not null && !IsAccountPage;
+        }
+    }
+
+    private string BodyClass
+    {
+        get
+        {
+            if (ShowSidebar)
+                return "app-layout__body app-layout__body--sidebar";
+
+            return "app-layout__body";
+        }
+    }
+
+    private string ContentClass
+    {
+        get
+        {
+            if (IsAccountPage)
+                return "app-layout__content app-layout__content--account";
+
+            return "app-layout__content";
+        }
+    }
 }

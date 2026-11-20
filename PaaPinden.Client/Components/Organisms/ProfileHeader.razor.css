@@ -1,0 +1,25 @@
+﻿.profile-header {
+    width: 70%;
+    background-color: #faf7ef;
+}
+
+.profile-header .profile-image {
+    margin-top: -40px;
+    border-color: #faf7ef !important;
+}
+
+.profile-header h2 {
+    color: #592b40;
+}
+
+.profile-header .profile-initials {
+    background-color: #592B40;
+    margin-top: -40px;
+    border-color: #faf7ef !important;
+}
+
+.profile-header .profile-initials > span {
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    font-size: 50px;
+}

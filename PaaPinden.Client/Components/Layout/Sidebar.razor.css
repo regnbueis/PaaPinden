@@ -1,52 +1,48 @@
-﻿nav ::deep .nav-link.ColorForSideBarText {
-    color: #592B40;
-}
-
-    nav ::deep .nav-link.ColorForSideBarText.active {
-        background-color: #fce4ec;
-    }
-
-.ColorBottonForSideBar {
-    background-color: #A75F77;
-    border-color: #A75F77;
-    color: white;
-}
-
-    .ColorBottonForSideBar:hover {
-        background-color: #A75F77;
-        border-color: #A75F77;
-        color: white;
-    }
-.app-layout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.layout-content {
-    display: flex;
-    flex: 1;
-    align-items: stretch;
-}
-
-.sidebar-container {
-    width: 200px;
-    flex-shrink: 0;
-}
-
-.main-content {
-    flex: 1;
-    min-width: 0;
-    padding: 24px;
-}
 aside {
-    width: 270px;
-    padding: 20px 16px;
-    flex-shrink: 0;
-    min-height: calc(100vh - 70px);
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1.25rem 1rem;
+    border-right: 0 !important;
 }
 
 nav ::deep .nav-link {
-    padding: 10px 16px;
-    font-size: 16px;
+    padding: .625rem 1rem;
+    font-size: 1rem;
+}
+
+nav ::deep .nav-link.ColorForSideBarText {
+    color: #592b40;
+}
+
+nav ::deep .nav-link.ColorForSideBarText.active {
+    background-color: #fce4ec;
+}
+
+.ColorBottonForSideBar {
+    background-color: #a75f77;
+    border-color: #a75f77;
+    color: #fff;
+}
+
+.ColorBottonForSideBar:hover {
+    background-color: #8f4c63;
+    border-color: #8f4c63;
+    color: #fff;
+}
+
+@media (max-width: 800px) {
+    aside {
+        padding: .75rem 1rem;
+    }
+
+    nav {
+        flex-direction: row !important;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+
+    nav ::deep .nav-link {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
 }

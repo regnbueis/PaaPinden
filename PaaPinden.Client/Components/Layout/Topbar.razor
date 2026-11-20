@@ -1,8 +1,3 @@
-@using Microsoft.AspNetCore.Identity
-
-@inject AuthenticationStateProvider AuthProvider
-@inject UserManager<ApplicationUser> UserManager
-
 <div class="navbar topbar d-flex justify-content-between align-items-center gap-4 px-3 border-bottom flex-nowrap">
     <NavLink href="" class="navbar-brand d-flex align-items-center gap-2">
         <img src="/logo.png" alt="På pinden" width="65" height="65" class="rounded-circle" />
@@ -10,15 +5,15 @@
     </NavLink>
 
     <div class="d-flex align-items-center gap-2">
-        @if (user != null)
+        @if (User != null)
         {
             <Button Design="Button.ButtonDesign.Notification" />
             <Button Design="Button.ButtonDesign.Message" />
 
-            <NavLink href=@($"profile/{user.Id}") class= "navbar-brand d-flex align-items-center gap-4" >
-                @if (user.Image != null && user.Image.Length > 0)
+            <NavLink href=@($"profile/{User.Id}") class= "navbar-brand d-flex align-items-center gap-4" >
+                @if (User.Image != null && User.Image.Length > 0)
                 {
-                    <img src="@($"data:{user.ImageFormat};base64,{Convert.ToBase64String(user.Image)}")" alt="" width="40" height="40" class="object-fit-cover rounded-circle" />
+                    <img src="@($"data:{User.ImageFormat};base64,{Convert.ToBase64String(User.Image)}")" alt="" width="40" height="40" class="object-fit-cover rounded-circle" />
                 }
                 else
                 {
@@ -28,21 +23,31 @@
                 }
             </NavLink>
         }
+        else
+        {
+            <Button Design="Button.ButtonDesign.GreenLink" Href="Account/Login" Class="topbar-login">Login</Button>
+            <Button Design="Button.ButtonDesign.GreenCurrent" Href="Account/Register">Register</Button>
+        }
     </div>
 </div>
 
 @code {
-    private ApplicationUser? user;
-    private string username => user?.Name ?? string.Empty;
-    private string initials => string.Join("", username.Split(' ').Select(x => x[0])).ToUpper();
+    [Parameter]
+    public ApplicationUser? User { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    private string initials
     {
-        AuthenticationState state = await AuthProvider.GetAuthenticationStateAsync();
-        
-        if (state.User.Identity?.IsAuthenticated == true)
+        get
         {
-            user = await UserManager.GetUserAsync(state.User);
+            string[] names = (User?.Name ?? string.Empty).Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (names.Length == 0)
+                return "?";
+
+            string result = names[0][0].ToString();
+            if (names.Length > 1)
+                result += names[names.Length - 1][0];
+
+            return result.ToUpperInvariant();
         }
-    }   
+    }
 }

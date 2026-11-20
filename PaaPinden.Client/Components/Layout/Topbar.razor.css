@@ -1,7 +1,8 @@
 .topbar {
     background-color: #faf7ef;
     width: 100%;
-    height: 68px;
+    min-height: 68px;
+    height: auto;
 }
 
 .topbar .navbar-brand > span {
@@ -19,4 +20,39 @@
     letter-spacing: 1.5px;
     font-weight: 700;
     font-size: 15px;
+}
+
+.topbar ::deep .topbar-login {
+    background: var(--pp-sage);
+    color: #fff;
+}
+
+.topbar ::deep .topbar-login:hover {
+    background: #697555;
+    color: #fff;
+}
+
+@media (max-width: 600px) {
+    .topbar {
+        gap: .5rem !important;
+    }
+
+    .topbar .navbar-brand {
+        margin-right: 0;
+    }
+
+    .topbar > .navbar-brand > img {
+        width: 44px;
+        height: 44px;
+    }
+
+    .topbar .navbar-brand > span {
+        font-size: 1.125rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .topbar .navbar-brand > span {
+        display: none;
+    }
 }

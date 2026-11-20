@@ -1,0 +1,30 @@
+﻿    .profilestats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        max-width: 256px;
+        padding: 10px 0;
+        background-color: #faf7ef;
+        font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .profilestat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        color: #592b40;
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+        .profilestat > span:first-child {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+    a.profilestat:hover > span:last-child,
+    a.profilestat:focus-visible > span:last-child {
+        text-decoration: underline;
+    }

@@ -1,42 +1,48 @@
-﻿<aside class="border-end bg-light">
+<aside class="border-end">
     <nav class="nav nav-pills flex-column gap-2"
          aria-label="Hovedmenu">
+        @if (User is not null)
+        {
+            <NavLink class="nav-link ColorForSideBarText"
+                     href="/" Match="NavLinkMatch.All">
+                Hjem
+            </NavLink>
 
-        <NavLink class="nav-link ColorForSideBarText"
-                 href="/" Match="NavLinkMatch.All">
-            Hjem
-        </NavLink>
+            <NavLink class="nav-link ColorForSideBarText" href="/mit-feed">
+                Mit feed
+            </NavLink>
 
-        <NavLink class="nav-link ColorForSideBarText" href="/mit-feed">
-            Mit feed
-        </NavLink>
+            <NavLink class="nav-link ColorForSideBarText" href="/forum">
+                Forum
+            </NavLink>
 
-        <NavLink class="nav-link ColorForSideBarText" href="/forum">
-            Forum
-        </NavLink>
+            <NavLink class="nav-link ColorForSideBarText"
+                     href="@($"profile/{User.Id}")">
+                Min profil
+            </NavLink>
+            <NavLink class="nav-link ColorForSideBarText" href="/gemte-opslag">
+                Gemte opslag
+            </NavLink>
 
-        <NavLink class="nav-link ColorForSideBarText" href="/min-profil">
-            Min profil
-        </NavLink>
+            <NavLink class="nav-link ColorForSideBarText" href="/projekter">
+                Projekter
+            </NavLink>
 
-        <NavLink class="nav-link ColorForSideBarText" href="/gemte-opslag">
-            Gemte opslag
-        </NavLink>
+            <NavLink class="nav-link ColorForSideBarText" href="/garn-og-pinde">
+                Garn og pinde
+            </NavLink>
 
-        <NavLink class="nav-link ColorForSideBarText" href="/projekter">
-            Projekter
-        </NavLink>
+            <Button Design="Button.ButtonDesign.Pink" class="nav-link" href="/opret-opslag">
+                Opret opslag
+            </Button>
+        }
 
-        <NavLink class="nav-link ColorForSideBarText" href="/garn-og-pinde">
-            Garn og pinde
-        </NavLink>
     </nav>
 
-    <a class="btn w-100 mt-4 ColorBottonForSideBar"
-       href="/opret-opslag">
-        opret opslag
-    </a>
+
 </aside>
+
 @code {
-    
-}
+    [Parameter]
+    public ApplicationUser? User { get; set; }
+        }

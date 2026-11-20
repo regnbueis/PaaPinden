@@ -75,6 +75,7 @@ namespace PaaPinden.Persistence
             feedPostToUpdate.MediaType = feedPost.MediaType;
             feedPostToUpdate.Description = feedPost.Description;
             feedPostToUpdate.Link = feedPost.Link;
+            feedPostToUpdate.Likes = feedPost.Likes;
 
             await _context.SaveChangesAsync();
         }
