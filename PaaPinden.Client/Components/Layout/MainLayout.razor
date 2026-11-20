@@ -8,18 +8,20 @@
     @* cspell:ignore indhold *@
     <a class="skip-link" href="#main-content">Gå til indhold</a>
     <header class="app-layout__header">
-        <Topbar User="@user" />
+        <Topbar User="@AuthenticatedUser" />
     </header>
     <div class="@BodyClass">
         @if (ShowSidebar)
         {
             <div class="app-layout__sidebar">
-                <Sidebar User="@user" />
+                <Sidebar User="@AuthenticatedUser" />
             </div>
         }
 
         <main id="main-content" class="@ContentClass" tabindex="-1">
-            @Body
+            <CascadingValue Value="@AuthenticatedUser">
+                @Body
+            </CascadingValue>
         </main>
     </div>
 </div>      
@@ -31,8 +33,7 @@
 </div>
 
 @code {
-    [CascadingParameter]
-    public ApplicationUser? user { get; set; }
+    public ApplicationUser? AuthenticatedUser { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -41,7 +42,7 @@
 
         if (state.User.Identity?.IsAuthenticated == true && !string.IsNullOrWhiteSpace(userId))
         {
-            user = await UserRepository.GetByIdAsync(userId);
+            AuthenticatedUser = await UserRepository.GetByIdAsync(userId);
         }
     }
 
@@ -61,7 +62,7 @@
     {
         get
         {
-            return user is not null && !IsAccountPage;
+            return AuthenticatedUser is not null && !IsAccountPage;
         }
     }
 
