@@ -5,8 +5,14 @@
 {
     <PageTitle>Profil: @User.Name</PageTitle>
  
-    <div class="d-flex flex-column p-4">
+    <div class="d-flex flex-column gap-2">
         <ProfileHeader User="@User" />
+
+        <div class="d-flex gap-2">
+            <Button Design="Button.ButtonDesign.GreenCurrent">Feed posts</Button>
+            <Button Design="Button.ButtonDesign.GreenLink">Forum posts</Button>
+            <Button Design="Button.ButtonDesign.GreenLink">Projekter</Button>
+        </div>
     </div>
 }
 else
