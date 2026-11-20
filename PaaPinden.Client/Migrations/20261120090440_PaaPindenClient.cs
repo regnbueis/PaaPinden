@@ -5,7 +5,7 @@
 namespace PaaPinden.Migrations
 {
     /// <inheritdoc />
-    public partial class UserImageNullable : Migration
+    public partial class PaaPindenClient : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
