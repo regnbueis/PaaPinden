@@ -25,7 +25,8 @@
 </div>
 
 @code {
-    private ApplicationUser? user;
+    [CascadingParameter]
+    public ApplicationUser? user { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
