@@ -7,33 +7,32 @@
 <div class="app-layout">
     @* cspell:ignore indhold *@
     <a class="skip-link" href="#main-content">Gå til indhold</a>
+
     <header class="app-layout__header">
         <Topbar User="@AuthenticatedUser" />
     </header>
-    <div class="@BodyClass">
+
+    <div class="app-layout__body">
+
         @if (ShowSidebar)
         {
-            <div class="app-layout__sidebar">
-                <Sidebar User="@AuthenticatedUser" />
-            </div>
-        }
+           
+                <div class="app-layout__sidebar">
+                    <Sidebar User="@AuthenticatedUser" />
+                </div> 
+            <main id="main-content" tabindex="-1">
+                <CascadingValue Value="@AuthenticatedUser">
+                    @Body
+                </CascadingValue>
+            </main>
+ }
 
-        <main id="main-content" class="@ContentClass" tabindex="-1">
-            <CascadingValue Value="@AuthenticatedUser">
-                @Body
-            </CascadingValue>
-        </main>
+        </div>
+
     </div>
-</div>      
-
-<div id="blazor-error-ui" role="alert">
-    <span>Der opstod en fejl. Genindlæs siden for at fortsætte.</span>
-    <a href="" class="reload">Genindlæs</a>
-    <button type="button" class="dismiss" aria-label="Luk fejlmeddelelsen">×</button>
-</div>
 
 @code {
-    public ApplicationUser? AuthenticatedUser { get; set; }
+    private ApplicationUser? AuthenticatedUser { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,25 +65,4 @@
         }
     }
 
-    private string BodyClass
-    {
-        get
-        {
-            if (ShowSidebar)
-                return "app-layout__body app-layout__body--sidebar";
-
-            return "app-layout__body";
-        }
-    }
-
-    private string ContentClass
-    {
-        get
-        {
-            if (IsAccountPage)
-                return "app-layout__content app-layout__content--account";
-
-            return "app-layout__content";
-        }
-    }
 }
