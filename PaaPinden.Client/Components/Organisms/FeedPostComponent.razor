@@ -1,18 +1,19 @@
 ﻿@inject IUserRepository userRepository
+@inject IFeedPostRepository feedPostRepository
 
 <div class="card rounded-3" style="width: 18rem;">
     <img src="data:@Feedpost.MediaType;base64,@Convert.ToBase64String(Feedpost.Media)" height="150" class="card-img-top rounded-3 object-fit-cover" alt="...">
     <div class="card-body">
         <div class="d-flex justify-content-between">
             <div class="d-flex">
-                <UserInfo User="author" Size="30"></UserInfo>
+                <UserInfo User="Feedpost.User" Size="30"></UserInfo>
             </div>
             <div class="d-flex">
-                <Button Design="Button.ButtonDesign.Like" OnClick="OnLike"></Button>
+                <Button Design="Button.ButtonDesign.Like" OnClick="Like"></Button>
                 <Button Design="Button.ButtonDesign.Save" OnClick="OnSave"></Button>
             </div>
         </div>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
+        <p class="card-text">@Feedpost.Description</p>
     </div>
 </div>
 
@@ -20,23 +21,18 @@
     [Parameter]
     public FeedPost Feedpost { get; set; }
 
-    private ApplicationUser author;
-
-    [Parameter]
-    public EventCallback OnLike { get; set; }
     [Parameter]
     public EventCallback OnSave { get; set; }
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     author = await userRepository.GetByIdAsync(Feedpost.UserId);
-
-    //     await base.OnInitializedAsync();
-    // }
     protected override async Task OnParametersSetAsync()
     {
-        author = await userRepository.GetByIdAsync(Feedpost.UserId);
         await base.OnParametersSetAsync();
+    }
+
+    public async Task Like()
+    {
+        Feedpost.Likes += 1;
+        await feedPostRepository.UpdateAsync(Feedpost);
     }
 
 
