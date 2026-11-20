@@ -8,6 +8,12 @@
 
 Welcome to your new app.
 
+@if (user is not null)
+{
+    <UserInfo User="@user" Size="70" />
+    <ProfileStat User="@user" />
+}
+
 <UserInfo User="@user" Size="70"></UserInfo>
 
 @code {
@@ -17,4 +23,5 @@ Welcome to your new app.
     {
         user = await userRepository.GetByIdAsync("d093fd33-e4c9-45af-ab51-83f651bf1fac");
     }
+
 }
