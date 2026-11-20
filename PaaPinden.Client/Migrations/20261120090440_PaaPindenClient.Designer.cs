@@ -12,8 +12,8 @@ using PaaPinden.Data;
 namespace PaaPinden.Migrations
 {
     [DbContext(typeof(PaaPindenContext))]
-    [Migration("20261117113254_UserImageNullable")]
-    partial class UserImageNullable
+    [Migration("20261120090440_PaaPindenClient")]
+    partial class PaaPindenClient
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

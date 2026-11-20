@@ -1,0 +1,22 @@
+﻿<div class="profilestats">
+    <div class="profilestat">
+        <span>@User.FeedPosts.Count</span>
+        <span>opslag</span>
+    </div>
+
+    <a class="profilestat" href="@($"profile/...")">
+        <span>@User.Followers.Count</span>
+        <span>følgere</span>
+    </a>
+
+    <a class="profilestat" href="@($"profile/...")">
+        <span>@User.Following.Count</span>
+        <span>følger</span>
+    </a>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public ApplicationUser User { get; set; } = default!;
+}
+
