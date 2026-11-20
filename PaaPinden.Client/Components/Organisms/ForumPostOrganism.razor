@@ -1,0 +1,96 @@
+﻿@inject IUserRepository userRepository
+@inject IForumPostRepository forumPostRepository
+@inject AuthenticationStateProvider AuthProvider
+@inject UserManager<ApplicationUser> UserManager
+
+@using Microsoft.AspNetCore.Identity
+
+@page "/ForumPosttest"
+
+<h3>@Post.Title</h3>
+<div>
+    <div>
+        <Button Design="Button.ButtonDesign.GreenCurrent">@Topic</Button>
+        <UserInfo User="Post.User" Size="30"></UserInfo>
+        <Button Design="Button.ButtonDesign.GreenLink">@Post.</Button>
+        <Button Design="Button.ButtonDesign.Pink">@PinkButtonText</Button>
+        @*TODO: missing three dots dropdown component*@
+    </div>
+    <div>
+        <p>@Post.Description</p>
+        <img src="data:@Post.MediaType;base64,@Convert.ToBase64String(Post.Media)" />
+    </div>
+    <div>
+        @if (Post.Link is not null)
+        {
+            <Button Design="Button.ButtonDesign.GreenLink" Href="@Post.Link">Se opskrift</Button>
+        }
+    </div>
+    <div>
+        <div>
+            @*like button with number of likes*@
+            <Button Design="Button.ButtonDesign.Message">Antal kommentarer vises her på sigt</Button>
+            <Button Design="Button.ButtonDesign.Save">Gem</Button>
+            <Button Design="Button.ButtonDesign.Notification">Del</Button>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public ForumPost? Post { get; set; }
+
+    [Parameter]
+    public string? Topic { get; set; }
+
+    private ApplicationUser? user;
+
+    private bool IsPoster => Post.User == user;
+    #region longer version of line 27
+    // {
+    //     get
+    //     {
+    //         if (Post.User == user)
+    //         {
+    //             return true;
+    //         }
+    //         else
+    //             return false;
+    //     }
+    //     set;
+    // }
+    #endregion
+    //maybe a little over engineered with our current usage, but in time we will need an
+    //Edit button which will need the same check, in which case this will be useful
+
+    public string? PinkButtonText => IsPoster ? "Slet" : "Følg";
+    #region longer version of line 46
+    // {
+    //     get
+    //     {
+    //         if(IsPoster)
+    //         {
+    //             return "Slet";
+    //         }
+    //         else
+    //         {
+    //             return "Følg";
+    //         }
+    //     }
+    //     set;
+    // }
+    // Both solutions are fine - it's a matter of preference which is more readable. And the team doesn't agree
+    #endregion
+
+    //find the user curently logged in and store in user
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState state = await AuthProvider.GetAuthenticationStateAsync();
+
+        if (state.User.Identity?.IsAuthenticated == true)
+        {
+            user = await UserManager.GetUserAsync(state.User);
+        }
+    }
+}
