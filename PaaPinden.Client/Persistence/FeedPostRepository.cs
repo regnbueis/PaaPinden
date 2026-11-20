@@ -51,6 +51,7 @@ namespace PaaPinden.Persistence
 
             return await _context.FeedPosts
                 .Where(x => x.UserId == userId)
+                .Include(x => x.User)
                 .ToListAsync();
         }
 

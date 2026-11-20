@@ -25,9 +25,19 @@
 
 .app-layout__sidebar {
     flex: 0 0 16rem;
-    align-self: stretch;
+    position: sticky;
+    top: 92px;
+    align-self: flex-start;
+    height: calc(100dvh - 92px); 
+    overflow-y: auto;
     min-width: 0;
     border-right: 1px solid #decfc3;
+}
+
+#main-content {
+    padding: 20px;
+    overflow: auto;
+    flex-grow: 1;
 }
 
 .app-layout__content {

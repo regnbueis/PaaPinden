@@ -1,5 +1,9 @@
 ﻿@inject IUserRepository userRepository
+@inject IFeedPostRepository feedPostRepository
+@inject IForumPostRepository forumPostRepository
+
 @page "/profile/{UserId}"
+@rendermode InteractiveServer 
 
 @if (User != null)
 {
@@ -8,10 +12,32 @@
     <div class="d-flex flex-column gap-2">
         <ProfileHeader User="@User" />
 
-        <div class="d-flex gap-2">
-            <Button Design="Button.ButtonDesign.GreenCurrent">Feed posts</Button>
-            <Button Design="Button.ButtonDesign.GreenLink">Forum posts</Button>
-            <Button Design="Button.ButtonDesign.GreenLink">Projekter</Button>
+        <div class="d-flex gap-3">
+            <Button Design='selection == "feed" ? Button.ButtonDesign.GreenCurrent : Button.ButtonDesign.GreenLink' OnClick='() => Select("feed")'>
+                Feed posts
+            </Button>
+
+            <Button Design='selection == "forum" ? Button.ButtonDesign.GreenCurrent : Button.ButtonDesign.GreenLink' OnClick='() => Select("forum")'>
+                Forum posts
+            </Button>
+
+            @* <Button Design="Button.ButtonDesign.GreenLink" OnClick="() => Select('projects')">Projekter</Button> *@
+        </div>
+
+        <div class="row mt-3">
+            @if (selection == "feed")
+            {
+                @foreach (FeedPost feedPost in feedPosts)
+                {
+                    <div class="col">
+                        <FeedPostComponent Feedpost="feedPost" />
+                    </div>
+                }
+            }
+            else if (selection == "forum")
+            {
+                <p>Forum posts</p>
+            }
         </div>
     </div>
 }
@@ -30,5 +56,18 @@ else
     protected override async Task OnInitializedAsync()
     {
         User = await userRepository.GetByIdAsync(UserId);
+
+        feedPosts = await feedPostRepository.GetAllByUserIdAsync(UserId);
+        forumPosts = await forumPostRepository.GetAllByUserIdAsync(UserId);
+    }
+
+    private List<FeedPost> feedPosts = new List<FeedPost>();
+    private List<ForumPost> forumPosts = new List<ForumPost>();
+
+    private string selection = "feed";
+
+    public async Task Select(string newSelection)
+    {
+        selection = newSelection;
     }
 }
