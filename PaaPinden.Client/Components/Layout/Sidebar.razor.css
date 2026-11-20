@@ -7,14 +7,14 @@
     }
 
 .ColorBottonForSideBar {
-    background-color: #A75F77;
-    border-color: #A75F77;
+    background-color: #FAF7EF;
+    border-color: #FAF7EF;
     color: white;
 }
 
     .ColorBottonForSideBar:hover {
-        background-color: #A75F77;
-        border-color: #A75F77;
+        background-color: #FAF7EF;
+        border-color: #FAF7EF;
         color: white;
     }
 .app-layout {
