@@ -1,11 +1,13 @@
 ﻿@inject IUserRepository userRepository
 @page "/profile/{UserId}"
 
-
 @if (User != null)
 {
     <PageTitle>Profil: @User.Name</PageTitle>
-    <p>Profil: @User.Name</p>
+ 
+    <div class="d-flex flex-column p-4">
+        <ProfileHeader User="@User" />
+    </div>
 }
 else
 {
@@ -16,6 +18,7 @@ else
 @code {
     [Parameter]
     public string UserId { get; set; }
+
     public ApplicationUser? User { get; set; }
 
     protected override async Task OnInitializedAsync()
