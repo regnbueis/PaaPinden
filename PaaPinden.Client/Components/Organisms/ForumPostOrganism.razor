@@ -3,48 +3,54 @@
 @inject AuthenticationStateProvider AuthProvider
 @inject UserManager<ApplicationUser> UserManager
 
+@rendermode InteractiveServer
+
 @using Microsoft.AspNetCore.Identity
 
-@page "/ForumPosttest"
-
-<h3>@Post.Title</h3>
-<div>
+@page "/Forum/{id}"
+@*Breadcrumbs sættes ind her*@
+@if (Post is not null)
+{
+    <h3>@Post.Title</h3>
     <div>
-        <Button Design="Button.ButtonDesign.GreenCurrent">@Topic</Button>
-        <UserInfo User="Post.User" Size="30"></UserInfo>
-        <Button Design="Button.ButtonDesign.GreenLink">@Post.</Button>
-        <Button Design="Button.ButtonDesign.Pink">@PinkButtonText</Button>
-        @*TODO: missing three dots dropdown component*@
-    </div>
-    <div>
-        <p>@Post.Description</p>
-        <img src="data:@Post.MediaType;base64,@Convert.ToBase64String(Post.Media)" />
-    </div>
-    <div>
-        @if (Post.Link is not null)
-        {
-            <Button Design="Button.ButtonDesign.GreenLink" Href="@Post.Link">Se opskrift</Button>
-        }
-    </div>
-    <div>
+        <div class="d-flex flex-row flex-grow-1 gap-1 py-3">
+            <Button Design="Button.ButtonDesign.GreenCurrent">@Post.Topic</Button>
+            <UserInfo User="@Post.User" Size="30"></UserInfo>
+            <Button Design="Button.ButtonDesign.Pink">@PinkButtonText</Button>
+            <Button Design="Button.ButtonDesign.GreenLink">...</Button>@*TODO: missing three dots dropdown component*@
+        </div>
         <div>
-            @*like button with number of likes*@
-            <Button Design="Button.ButtonDesign.Message">Antal kommentarer vises her på sigt</Button>
-            <Button Design="Button.ButtonDesign.Save">Gem</Button>
-            <Button Design="Button.ButtonDesign.Notification">Del</Button>
+            <p>@Post.Description</p>
+            <img src="data:@Post.MediaType;base64,@Convert.ToBase64String(Post.Media)" />
+        </div>
+        <div>
+            @if (Post.Link is not null)
+            {
+                <Button Design="Button.ButtonDesign.GreenLink" Href="@Post.Link">Se opskrift</Button>
+            }
+        </div>
+        <div>
+            <div class="d-flex flex-column flex-grow-1 gap-1 py-3">
+                <Button Design="Button.ButtonDesign.Like">@Post.Likes</Button>
+                @*like button with number of likes*@
+                <Button Design="Button.ButtonDesign.Message">Antal kommentarer vises her på sigt</Button>
+                <Button Design="Button.ButtonDesign.Save">Gem</Button>
+                <Button Design="Button.ButtonDesign.Notification">Del</Button>
+            </div>
         </div>
     </div>
-</div>
-
+}
 @code {
+    [CascadingParameter]
+    private ApplicationUser? user { get; set; }
 
     [Parameter]
+    public string id { get; set; }
+
     public ForumPost? Post { get; set; }
 
     [Parameter]
     public string? Topic { get; set; }
-
-    private ApplicationUser? user;
 
     private bool IsPoster => Post.User == user;
     #region longer version of line 27
@@ -83,14 +89,9 @@
     // Both solutions are fine - it's a matter of preference which is more readable. And the team doesn't agree
     #endregion
 
-    //find the user curently logged in and store in user
-    protected override async Task OnInitializedAsync()
-    {
-        AuthenticationState state = await AuthProvider.GetAuthenticationStateAsync();
 
-        if (state.User.Identity?.IsAuthenticated == true)
-        {
-            user = await UserManager.GetUserAsync(state.User);
-        }
+    protected override async Task OnParametersSetAsync()
+    {
+        Post = await forumPostRepository.GetByIdAsync(id);
     }
 }

@@ -16,20 +16,20 @@
 
         @if (ShowSidebar)
         {
-           
-                <div class="app-layout__sidebar">
-                    <Sidebar User="@AuthenticatedUser" />
-                </div> 
-            <main id="main-content" tabindex="-1">
-                <CascadingValue Value="@AuthenticatedUser">
-                    @Body
-                </CascadingValue>
-            </main>
- }
 
-        </div>
+            <div class="app-layout__sidebar">
+                <Sidebar User="@AuthenticatedUser" />
+            </div>
+        }
+        <main id="main-content" tabindex="-1">
+            <CascadingValue Value="@AuthenticatedUser">
+                @Body
+            </CascadingValue>
+        </main>
 
     </div>
+
+</div>
 
 @code {
     private ApplicationUser? AuthenticatedUser { get; set; }
