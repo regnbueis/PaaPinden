@@ -1,10 +1,13 @@
-﻿<div class="profile-header pb-5">
+﻿@inject IUserRepository userRepository
+@inject NavigationManager navigationManager
+
+<div class="profile-header">
     <img src="/banner.png" alt="" class="w-100 object-fit-cover rounded-4" style="height: 114px;">
 
     <div class="d-flex align-items-start gap-4 px-4">
         @if (User.Image != null && User.Image.Length > 0)
         {
-            <img src="@($"data:{User.ImageFormat};base64,{Convert.ToBase64String(User.Image)}")" alt="@User.Name" width="134" height="134" class="profile-image object-fit-cover rounded-circle border border-4" />
+            <img src="@($"data:{User.ImageFormat};base64,{Convert.ToBase64String(User.Image)}")" alt="@User.Name" width="134" height="134" style="min-width: 134px; min-height: 134px;" class="profile-image object-fit-cover rounded-circle border border-4" />
         }
         else
         {
@@ -13,7 +16,7 @@
             </div>
         }
 
-        <div class="d-flex flex-column flex-grow-1 gap-1 py-3">
+        <div class="d-flex flex-column flex-grow-1 gap-0 py-3">
             <div class="d-flex flex-grow-1 justify-content-between align-content-center">
                 <h2 class="fw-bold mb-0">@User.Name</h2>
                 
@@ -26,7 +29,14 @@
                         }
                         else
                         {
-                            <Button Design="Button.ButtonDesign.Pink">Følg</Button>
+                            @if (isFollowing)
+                            {
+                                <Button Design="Button.ButtonDesign.Pink" OnClick="@Unfollow">Følger</Button>
+                            }
+                            else
+                            {
+                                <Button Design="Button.ButtonDesign.Pink" OnClick="@Follow">Følg</Button>
+                            }
                         }
                     }
                 </div>
@@ -35,8 +45,6 @@
             <div class="d-flex flex-row justify-content-between gap-3">
                 <span class="small">
                     description?
-                
-                    @AuthenticatedUser?.Id, @User.Id
                 </span>
 
                 <ProfileStat User="User" />
@@ -55,4 +63,26 @@
 
     private string username => User?.Name ?? string.Empty;
     private string initials => string.Join("", username.Split(' ').Select(x => x[0])).ToUpper();
+
+    private bool isFollowing => AuthenticatedUser != null && User.Followers.Any(x => x.UserId == AuthenticatedUser.Id);
+
+    public async Task Follow()
+    {
+        if (AuthenticatedUser == null) return;
+        if (isFollowing) return;
+
+        await userRepository.FollowAsync(AuthenticatedUser.Id, User.Id);
+        User = await userRepository.GetByIdAsync(User.Id);
+        // navigationManager.NavigateTo($"/profile/{User.Id}");
+    }
+
+    public async Task Unfollow()
+    {
+        if (AuthenticatedUser == null) return;
+        if (!isFollowing) return;
+
+        await userRepository.UnfollowAsync(AuthenticatedUser.Id, User.Id);
+        User = await userRepository.GetByIdAsync(User.Id);
+        // navigationManager.NavigateTo($"/profile/{User.Id}");
+    }
 }

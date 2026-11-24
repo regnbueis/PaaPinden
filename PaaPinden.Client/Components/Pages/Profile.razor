@@ -5,7 +5,15 @@
 @page "/profile/{UserId}"
 @rendermode InteractiveServer 
 
-@if (User != null)
+@if (isLoading)
+{
+    <PageTitle>Profil</PageTitle>
+
+    <div class="spinner-border" style="color: #a75f77 !important;" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+}
+else if (User != null)
 {
     <PageTitle>Profil: @User.Name</PageTitle>
  
@@ -13,11 +21,11 @@
         <ProfileHeader User="@User" />
 
         <div class="d-flex gap-3">
-            <Button Design='selection == "feed" ? Button.ButtonDesign.GreenCurrent : Button.ButtonDesign.GreenLink' OnClick='() => Select("feed")'>
+            <Button Design='selection == ProfileSelection.Feed ? Button.ButtonDesign.GreenCurrent : Button.ButtonDesign.GreenLink' OnClick='() => Select(ProfileSelection.Feed)'>
                 Feed posts
             </Button>
 
-            <Button Design='selection == "forum" ? Button.ButtonDesign.GreenCurrent : Button.ButtonDesign.GreenLink' OnClick='() => Select("forum")'>
+            <Button Design='selection == ProfileSelection.Forum ? Button.ButtonDesign.GreenCurrent : Button.ButtonDesign.GreenLink' OnClick='() => Select(ProfileSelection.Forum)'>
                 Forum posts
             </Button>
 
@@ -25,7 +33,7 @@
         </div>
 
         <div class="row mt-3">
-            @if (selection == "feed")
+            @if (selection == ProfileSelection.Feed)
             {
                 @foreach (FeedPost feedPost in feedPosts)
                 {
@@ -34,9 +42,14 @@
                     </div>
                 }
             }
-            else if (selection == "forum")
+            else if (selection == ProfileSelection.Forum)
             {
-                <p>Forum posts</p>
+                @foreach (ForumPost forumPost in forumPosts)
+                {
+                    <div class="col">
+                        <ForumPostOrganism Post="forumPost" />
+                    </div>
+                }
             }
         </div>
     </div>
@@ -53,20 +66,32 @@ else
 
     public ApplicationUser? User { get; set; }
 
+    private bool isLoading = true;
+
     protected override async Task OnInitializedAsync()
     {
         User = await userRepository.GetByIdAsync(UserId);
 
         feedPosts = await feedPostRepository.GetAllByUserIdAsync(UserId);
         forumPosts = await forumPostRepository.GetAllByUserIdAsync(UserId);
+
+        isLoading = false;
     }
+
 
     private List<FeedPost> feedPosts = new List<FeedPost>();
     private List<ForumPost> forumPosts = new List<ForumPost>();
 
-    private string selection = "feed";
+    enum ProfileSelection
+    {
+        Feed,
+        Forum,
+        Projects
+    }
 
-    public async Task Select(string newSelection)
+    private ProfileSelection selection = ProfileSelection.Feed;
+
+    private async Task Select(ProfileSelection newSelection)
     {
         selection = newSelection;
     }
