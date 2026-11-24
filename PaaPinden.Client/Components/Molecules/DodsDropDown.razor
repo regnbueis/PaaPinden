@@ -1,0 +1,19 @@
+<div class="dots-dropdown">
+    <button type="button"
+            class="dots-toggle"
+            popovertarget="@menuPoint"
+            label="Flere muligheder">
+        <span aria-hidden="true">...</span>
+    </button>
+
+    <div id="@menuPoint" class="dots-panel" popover="auto">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    private readonly string menuPoint = $"menu-{Guid.NewGuid():N}";
+
+    [Parameter, EditorRequired]
+    public RenderFragment? ChildContent { get; set; }
+}

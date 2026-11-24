@@ -1,0 +1,46 @@
+.dots-dropdown {
+    display: inline-block;
+}
+
+.dots-toggle {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 50%;
+    background: #faf7ef;
+    color: #592b40;
+    letter-spacing: 0.1em;
+}
+
+.dots-toggle:hover,
+.dots-toggle:focus-visible {
+    background: #efdfe6;
+}
+
+.dots-panel {
+    position: absolute;
+    inset: auto;
+    margin: 0.25rem 0 0;
+    padding: 0.25rem;
+    border: 1px solid #e2cfd8;
+    border-radius: 0.6rem;
+    background: #fff;
+    box-shadow: 0 4px 12px #592b401a;
+}
+
+.dots-panel {
+    background: #faf7ef;
+}
+
+    .dots-panel ::deep a {
+        display: block;
+        color: #592b40;
+    }
+
+.dots-panel ::deep a:hover,
+.dots-panel ::deep a:focus-visible {
+    background: #efdfe6;
+}
+
