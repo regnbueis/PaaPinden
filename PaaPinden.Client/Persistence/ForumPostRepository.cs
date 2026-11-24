@@ -60,6 +60,8 @@ namespace PaaPinden.Persistence
             using PaaPindenContext _context = _factory.CreateDbContext();
 
             return await _context.ForumPosts
+                .AsNoTracking()
+                .Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
