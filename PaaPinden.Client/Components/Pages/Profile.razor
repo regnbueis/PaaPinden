@@ -9,7 +9,7 @@
 {
     <PageTitle>Profil</PageTitle>
 
-    <div class="spinner-border" style="color: #a75f77 !important;" role="status">
+    <div class="spinner-border" style="color: #a75f77 !important; width: 3rem; height: 3rem;" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
 }
@@ -65,11 +65,16 @@ else
     public string UserId { get; set; }
 
     public ApplicationUser? User { get; set; }
+    private ProfileSelection selection = ProfileSelection.Feed;
 
     private bool isLoading = true;
+    private string? loadedUserId;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
+        isLoading = true;
+        selection = ProfileSelection.Feed;
+
         User = await userRepository.GetByIdAsync(UserId);
 
         feedPosts = await feedPostRepository.GetAllByUserIdAsync(UserId);
@@ -89,7 +94,6 @@ else
         Projects
     }
 
-    private ProfileSelection selection = ProfileSelection.Feed;
 
     private async Task Select(ProfileSelection newSelection)
     {
