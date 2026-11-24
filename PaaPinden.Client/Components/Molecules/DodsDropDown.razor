@@ -12,7 +12,7 @@
 </div>
 
 @code {
-    private readonly string menuPoint = $"menu-{Guid.NewGuid():N}";
+    private readonly string menuPoint = $"{Guid.NewGuid()}";
 
     [Parameter, EditorRequired]
     public RenderFragment? ChildContent { get; set; }
