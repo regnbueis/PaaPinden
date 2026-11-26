@@ -1,7 +1,9 @@
-﻿@inject IUserRepository userRepository
-@inject IForumPostRepository forumPostRepository
+﻿@inject IForumPostRepository forumPostRepository
 @inject AuthenticationStateProvider AuthProvider
 @inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager navManager
+@inject IJSRuntime jsruntime
+
 
 @rendermode InteractiveServer
 
@@ -38,14 +40,14 @@
         <div>
             <div class="d-flex flex-row flex-grow-1 column-gap-5 py-3">
                 <Button Design="Button.ButtonDesign.Like">@Post.Likes</Button>
-                @*like button with number of likes*@
                 <Button Design="Button.ButtonDesign.Message">7</Button>
                 <Button Design="Button.ButtonDesign.Save">Gem</Button>
-                <Button Design="Button.ButtonDesign.Message">Del</Button>
+                <Button Design="Button.ButtonDesign.Save" @onclick="CopyToClipboard">Del</Button>
             </div>
         </div>
     </div>
 }
+
 @code {
     [CascadingParameter]
     private ApplicationUser? user { get; set; }
@@ -95,9 +97,16 @@
     // Both solutions are fine - it's a matter of preference which is more readable. And the team doesn't agree
     #endregion
 
+    private string Navigation { get; set; }
+
+    public void CopyToClipboard()
+    {
+        jsruntime.InvokeVoidAsync("navigator.clipboard.writeText", Navigation);
+    }
 
     protected override async Task OnParametersSetAsync()
     {
         Post = await forumPostRepository.GetByIdAsync(id);
+        Navigation = navManager.Uri;
     }
 }

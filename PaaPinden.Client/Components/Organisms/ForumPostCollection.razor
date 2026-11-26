@@ -1,0 +1,25 @@
+﻿@page "/test700"
+@inject IForumPostRepository repo
+@rendermode InteractiveServer
+
+@if (posts != null)
+{
+    <div class="d-flex flex-row flex-grow-1 gap-5 py-3">
+        @foreach (ForumPost post in posts)
+        {
+            <ForumPostLineComponent Post="post"></ForumPostLineComponent>
+            
+        }
+    </div>
+}
+@code {
+
+
+    private List<ForumPost> posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await repo.GetAllAsync();
+    }
+
+}
