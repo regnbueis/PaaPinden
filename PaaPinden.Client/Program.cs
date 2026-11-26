@@ -6,7 +6,7 @@ using PaaPinden.Components.Account;
 using PaaPinden.Contracts;
 using PaaPinden.Data;
 using PaaPinden.Persistence;
-using System.Text.Json.Serialization;
+using MudBlazor.Services;
 
 namespace PaaPinden
 {
@@ -52,7 +52,7 @@ namespace PaaPinden
     .AddDefaultTokenProviders();
 
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-
+            builder.Services.AddMudServices();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
