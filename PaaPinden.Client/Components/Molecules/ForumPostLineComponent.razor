@@ -1,0 +1,13 @@
+﻿@rendermode InteractiveServer
+
+<div class="d-flex gap-2">
+    <UserInfo User="@Post.User" Size="30"></UserInfo>
+    <a href="/Forum/@Post.Id">@Post.Title</a>
+    <Button Design="Button.ButtonDesign.Like">@Post.Likes</Button>
+</div>
+@code {
+    [Parameter] //passed from parent component's foreach loop
+    public ForumPost? Post { get; set; }
+
+
+}

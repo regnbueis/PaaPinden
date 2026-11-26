@@ -4,6 +4,15 @@
 @inject IUserRepository UserRepository
 @using System.Security.Claims
 
+@* Required *@
+<MudThemeProvider />
+<MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
 
 <div class="app-layout">
     <a class="skip-link" href="#main-content">Gå til indhold</a>
@@ -21,6 +30,7 @@
                 <Sidebar User="@AuthenticatedUser" />
             </div>
         }
+
         <main id="main-content" tabindex="-1">
             <CascadingValue Value="@AuthenticatedUser">
                 @Body
