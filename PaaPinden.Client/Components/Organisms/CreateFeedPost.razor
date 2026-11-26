@@ -1,0 +1,58 @@
+﻿@page "/createfeedpost"
+
+
+@inject IFeedPostRepository feedPostRepository
+@inject NavigationManager navigationManager
+
+<p>@(user != null ? user.UserName : "")</p>
+<EditForm Model="feedPost" FormName="createFeedPost" OnValidSubmit="submitFeedpost">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label">Upload billede eller video</label>
+                <InputFile placeholder="Upload billede" class="form-control" onchange="fileUpload"></InputFile>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <InputTextArea class="form-control" rows="4" @bind-Value="feedPost.Description"></InputTextArea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Link</label>
+                <InputTextArea class="form-control" rows="4" @bind-Value="feedPost.Link"></InputTextArea>
+            </div>
+        </div>
+    </div>
+    <Button Design="Button.ButtonDesign.Pink" type="submit">Opret feedpost</Button>
+    <button class="btn btn-primary" type="submit">teeeeeeeest</button>
+    
+</EditForm>
+
+
+@code {
+    [CascadingParameter]
+    public ApplicationUser? user { get; set; }
+
+    private FeedPost feedPost = new FeedPost();
+
+    private IFormFile file;
+
+
+    private void submitFeedpost()
+    {
+        feedPost.UserId = user.Id;
+        feedPostRepository.CreateAsync(feedPost);
+
+        navigationManager.NavigateTo("/");
+    }
+
+    private async Task fileUpload(InputFileChangeEventArgs e)
+    {
+        MemoryStream ms = new MemoryStream();
+        await e.File.OpenReadStream().CopyToAsync(ms);
+        feedPost.Media = ms.ToArray();
+        feedPost.MediaType = e.File.ContentType;
+        //do something with bytes
+    }
+}

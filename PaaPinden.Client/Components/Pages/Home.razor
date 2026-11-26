@@ -1,19 +1,8 @@
 @page "/"
 
-@inject IUserRepository userRepository
-
+@* <PageTitle>Home</PageTitle> *@
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<UserInfo User="@user" Size="70"></UserInfo>
 @code {
-    ApplicationUser user;
-
-    protected override async Task OnInitializedAsync()
-    {
-        user = await userRepository.GetByIdAsync("d093fd33-e4c9-45af-ab51-83f651bf1fac");
-    }
 }
