@@ -2,19 +2,20 @@
 @inject IForumPostRepository repo
 @rendermode InteractiveServer
 
-@if (posts != null)
-{
-    <div class="d-flex flex-row flex-grow-1 gap-5 py-3">
-        @foreach (ForumPost post in posts)
-        {
-            <ForumPostLineComponent Post="post"></ForumPostLineComponent>
-            
-        }
-    </div>
-}
+<MudTable T="ForumPost" Items="@posts" Hover="true" Breakpoint="Breakpoint.Sm"
+          RowHref="@(post => $"/Forum/{post.Id}")">
+    <RowTemplate>
+        <MudTd DataLabel="Titel">@context.Title</MudTd>
+        <MudTd DataLabel="Forfatter">
+            <UserInfo User="@context.User" Size="30"></UserInfo>
+        </MudTd>
+        <MudTd DataLabel="Emne">@context.Topic</MudTd>
+        <MudTd DataLabel="Likes">
+            <Button Design="Button.ButtonDesign.Like" Disabled="true">@context.Likes</Button>
+            </MudTd>
+    </RowTemplate>
+</MudTable>
 @code {
-
-
     private List<ForumPost> posts;
 
     protected override async Task OnInitializedAsync()
